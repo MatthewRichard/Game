@@ -64,16 +64,32 @@ addEventListener("keyup", function (e) {
 	delete keysDown[e.keyCode];
 }, false);
 
+var checkBounds = function(character){
+	if(character.x + 64 > canvas.width){
+		character.x = canvas.width - 64;
+	}
+	if(character.y + 64 > canvas.height){
+		character.y = canvas.height - 64;
+	}
+	if(character.x - 32 < 0){
+		character.x = 32;
+	}
+	if(character.y - 32 < 0){
+		character.x = 32;
+	}
+		
+};
+	
 // Reset the game when the player catches a monster
 var reset = function () {
 	hero.x = canvas.width / 2;
 	hero.y = canvas.height / 2;
 	hero.targetx = hero.x
 	hero.targety = hero.y
-	
-	// Throw the monster somewhere on the screen randomly
 	monster.x = 32 + (Math.random() * (canvas.width - 64));
 	monster.y = 32 + (Math.random() * (canvas.height - 64));
+	// Throw the monster somewhere on the screen randomly
+	checkBounds(monster);
 };
 
 // Update game objects
@@ -104,6 +120,8 @@ var update = function (modifier) {
 			hero.y -= hero.speed * modifier;
 		}	
 	}
+	checkBounds(hero);
+	
 	// Are they touching?
 	if (
 		hero.x <= (monster.x + 32)
