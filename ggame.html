@@ -44,6 +44,14 @@ monsterImage.onload = function () {
 };
 monsterImage.src = "images/monster.png";
 
+
+var monster2Ready = false;
+var monster2Image = new Image();
+monster2Image.onload = function () {
+	monster2Ready = true;
+};
+monster2Image.src = "images/monster.png";
+
 // Game objects
 var hero = {
 	speed: 256, // movement in pixels per second
@@ -51,6 +59,7 @@ var hero = {
 	targety: 300
 };
 var monster = {};
+var monster2 = {};
 var monstersCaught = 0;
 
 // Handle keyboard controls
@@ -88,6 +97,11 @@ var reset = function () {
 	hero.targety = hero.y
 	monster.x = 32 + (Math.random() * (canvas.width - 64));
 	monster.y = 32 + (Math.random() * (canvas.height - 64));
+	
+	monster2.x = 32 + (Math.random() * (canvas.width - 64));
+	monster2.y = 32 + (Math.random() * (canvas.height - 64));
+	
+	
 	// Throw the monster somewhere on the screen randomly
 	checkBounds(monster);
 };
@@ -140,14 +154,17 @@ var render = function () {
 		ctx.drawImage(bgImage, 0, 0);
 	}
 
-	if (heroReady) {
-		ctx.drawImage(heroImage, hero.x, hero.y);
-	}
-
 	if (monsterReady) {
 		ctx.drawImage(monsterImage, monster.x, monster.y);
 	}
-
+	
+	if (monster2Ready) {
+		ctx.drawImage(monster2Image, monster.x+40, monster.y+40);
+	}
+	if (heroReady) {
+		ctx.drawImage(heroImage, hero.x, hero.y);
+	}
+	
 	// Score
 	ctx.fillStyle = "rgb(250, 250, 250)";
 	ctx.font = "24px Helvetica";
