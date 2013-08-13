@@ -142,7 +142,19 @@ var update = function (modifier) {
 		&& monster.x <= (hero.x + 32)
 		&& hero.y <= (monster.y + 32)
 		&& monster.y <= (hero.y + 32)
-	) {
+	)
+	{
+		++monstersCaught;
+		reset();
+	}
+	
+	if (
+		hero.x <= (monster2.x + 32)
+		&& monster2.x <= (hero.x + 32)
+		&& hero.y <= (monster2.y + 32)
+		&& monster2.y <= (hero.y + 32)
+	)
+	{
 		++monstersCaught;
 		reset();
 	}
@@ -159,7 +171,7 @@ var render = function () {
 	}
 	
 	if (monster2Ready) {
-		ctx.drawImage(monster2Image, monster.x+40, monster.y+40);
+		ctx.drawImage(monster2Image, monster2.x, monster2.y);
 	}
 	if (heroReady) {
 		ctx.drawImage(heroImage, hero.x, hero.y);
@@ -170,7 +182,7 @@ var render = function () {
 	ctx.font = "24px Helvetica";
 	ctx.textAlign = "left";
 	ctx.textBaseline = "top";
-	ctx.fillText("Goblins caught: " + monstersCaught, 32, 32);
+	ctx.fillText("Goblins shanked: " + monstersCaught, 32, 32);
 };
 
 // The main game loop
