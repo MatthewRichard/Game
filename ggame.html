@@ -36,21 +36,31 @@ heroImage.onload = function () {
 };
 heroImage.src = "images/hero.png";
 
-// Monster image
-var monsterReady = false;
-var monsterImage = new Image();
-monsterImage.onload = function () {
-	monsterReady = true;
+function Monster() {
+    this.ready =  false;
+    this.image = null;
+    this.x = 0;
+    this.y = 0;
 };
-monsterImage.src = "images/monster.png";
-
-
-var monster2Ready = false;
-var monster2Image = new Image();
-monster2Image.onload = function () {
-	monster2Ready = true;
+Monster.prototype.init = function() {
+      // Monster image
+      var self = this;
+      this.image = new Image();
+      this.image.onload = function () {
+        self.ready = true;
+      };
+      this.image.src = "images/monster.png";
 };
-monster2Image.src = "images/monster.png";
+Monster.prototype.reset = function() {
+ 	this.x = 32 + (Math.random() * (canvas.width - 64));
+	this.y = 32 + (Math.random() * (canvas.height - 64));
+};
+
+var createMonster = function() {
+  var gobblin = new Monster();
+  gobblin.init();
+  return gobblin;
+};
 
 // Game objects
 var hero = {
@@ -58,8 +68,8 @@ var hero = {
 	targetx: 300,
 	targety: 300
 };
-var monster = {};
-var monster2 = {};
+var monster = createMonster();
+var monster2 = createMonster();
 var monstersCaught = 0;
 
 // Handle keyboard controls
@@ -95,15 +105,6 @@ var reset = function () {
 	hero.y = canvas.height / 2;
 	hero.targetx = hero.x
 	hero.targety = hero.y
-	monster.x = 32 + (Math.random() * (canvas.width - 64));
-	monster.y = 32 + (Math.random() * (canvas.height - 64));
-	
-	monster2.x = 32 + (Math.random() * (canvas.width - 64));
-	monster2.y = 32 + (Math.random() * (canvas.height - 64));
-	
-	
-	// Throw the monster somewhere on the screen randomly
-	checkBounds(monster);
 };
 
 // Update game objects
@@ -145,7 +146,8 @@ var update = function (modifier) {
 	)
 	{
 		++monstersCaught;
-		reset();
+		monster.reset();
+	  checkBounds(monster);
 	}
 	
 	if (
@@ -156,7 +158,8 @@ var update = function (modifier) {
 	)
 	{
 		++monstersCaught;
-		reset();
+		monster2.reset();
+    checkBounds(monster2);
 	}
 };
 
@@ -166,12 +169,12 @@ var render = function () {
 		ctx.drawImage(bgImage, 0, 0);
 	}
 
-	if (monsterReady) {
-		ctx.drawImage(monsterImage, monster.x, monster.y);
+	if (monster.ready) {
+		ctx.drawImage(monster.image, monster.x, monster.y);
 	}
 	
-	if (monster2Ready) {
-		ctx.drawImage(monster2Image, monster2.x, monster2.y);
+	if (monster2.ready) {
+		ctx.drawImage(monster2.image, monster2.x, monster2.y);
 	}
 	if (heroReady) {
 		ctx.drawImage(heroImage, hero.x, hero.y);
@@ -198,6 +201,8 @@ var main = function () {
 
 // Let's play this game!
 reset();
+monster.reset();
+monster2.reset();
 var then = Date.now();
 setInterval(main, 1); // Execute as fast as possible
 </script>
